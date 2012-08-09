@@ -5,21 +5,23 @@ class PreprocessingStage::PreProcessing
 include LinkProbability
 
 def self.test
-DB.run_queries [INSERT_ANCHOR_DATA_INTO_PROP_TABLE%["ali",2]]
+puts "Hi"
 end
 
 def self.callLinkProbability
+  
   puts "Start linkProbabilityTable"
   
   puts "Start calculate_link_occure"
   link_occure=PreprocessingStage::LinkProbability.calculate_link_occure #label:{[label,title] => #OfOccur}
   puts "End calculate_link_occure"
   
+  # we need only the labels to build the trie
   labels=[]
   link_occure.each do |key,val|
-    if (key[0] != nil && key[0].size >0)
+    if (key[0] != nil && key[0].size > 0)
       labels << key[0]
-    end  
+    end
   end
 
   puts "Start calculate_text_occure"
@@ -34,26 +36,28 @@ def self.callLinkProbability
 end
 
 def self.save_link_probability_table link,text
-  ActiveRecord::Base.connection.execute("
-  create table link_prop_tmp(
-  label VARCHAR(255) NOT NULL,
-  page_title VARCHAR(255) NOT NULL,
-  text_occure MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-  link_occure MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-  KEY(page_title)
+  ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS link_prop_tmp;")
+  ActiveRecord::Base.connection.execute(  
+  "CREATE TABLE link_prop_tmp
+  ( 
+    label VARCHAR(255) NOT NULL,
+    page_title VARCHAR(255) NOT NULL,
+    text_occur MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    link_occur MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    KEY(page_title)
   ) DEFAULT CHARSET=utf8;
   ")
+  
   link.each do |key, val|
   if (text[key[0]] == nil)
     text[key[0]]=0
   end
   ActiveRecord::Base.connection.execute("
-  INSERT IGNORE INTO link_prop_tmp(label, page_title, text_occure, link_occure) 
+  INSERT IGNORE INTO link_prop_tmp(label, page_title, text_occur, link_occur) 
   VALUES (\"#{key[0]}\",\"#{key[1]}\",#{text[key[0]]},#{val});
   ")
   end
 end
-
  def self.synonymsFirstJoin
     results = 
         ActiveRecord::Base.connection.execute(" select rd_from , rd_title , page_id

@@ -24,7 +24,6 @@ class PreprocessingStage::ArabicNormalizer
     @lamalef_reg = { :reg=>build_regex(@lamalef), :replacement=>"لا"}
     @yeh_reg = { :reg=>build_regex(@yeh), :replacement=>'ي' }
     @heh_reg = { :reg=>build_regex(@heh), :replacement=>'ه' }
-    puts "dfd #{@heh_reg.size}"
     # Build a hash representing the available options for normalization
     @options={:norm_all=>[:tashkeel, :tatweel, :alef, :lamalef, :yeh, :heh],
       :tashkeel=>@tashkeel_reg, :tatweel=>@tatweel_reg, :alef=>@alef_reg,
