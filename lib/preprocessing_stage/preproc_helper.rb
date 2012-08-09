@@ -2,7 +2,7 @@
 require 'nokogiri'
 require 'preprocessing_stage/arabic_normalizer'
 
-XML_FILE = File.join('', "#{::Rails.root}/arwiki-latest-pages-articles.xml")
+XML_FILE = File.join('', "/home/msaleh/Aptana\ Studio\ 3\ Workspace/AutoTagger/arwiki-latest-pages-articles.xml")
 LINK_PATTERN = /\[\[([^\[\]:]*)\]\]/
 
 TASNEEF_PAGE = /^تصنيف:.*/
