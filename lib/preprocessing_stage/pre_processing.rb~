@@ -1,0 +1,20 @@
+require 'preprocessing_stage/trie'
+
+class PreprocessingStage::PreProcessing
+include LinkProbability
+
+def initialize
+end
+
+def self.callLinkProbability
+
+  labels=PreprocessingStage::LinkProbability.linkProbabilityTable
+  #labels is {label => numberOfOccurrence}
+  
+  # x=["mohamed saleh","mohamed"]
+  # trie = Trie.new(x)
+  # y=trie.compute_text_occur("mohamed saleh")
+  # puts y
+  
+end
+end
