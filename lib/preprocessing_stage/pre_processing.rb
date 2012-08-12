@@ -87,18 +87,41 @@ end
      results.each do |r|
       p_title = r[1].strip.gsub("\""," ").force_encoding('utf-8')
       if p_title.include? "توضيح"
-        # checkExist = ActiveRecord::Base.connection.execute(" select page_title from Disambiguation  where page_title=\"#{p_title}\" ;")
-         # if checkExist.size==0
             results2 = ActiveRecord::Base.connection.execute(" select pl_title from pagelinks where pl_from = #{r[0]} and pl_namespace = 0;")
             results2.each do |r2|
                  pl_title = r2[0].strip.gsub("\""," ").force_encoding('utf-8')
                  pl_title = pl_title.strip.gsub("\\"," ").force_encoding('utf-8')
                  ActiveRecord::Base.connection.execute("insert into Disambiguation values (#{r[0]}, \"#{p_title}\",\"#{pl_title}\");")
             end
-        # end      
       end 
     end
-    
  end 
 
+ def self.combineSynonyms 
+   results = ActiveRecord::Base.connection.execute(" select * from Synonyms2 ;")
+   
+   results.each do |r|
+      page_title = r[1].strip.gsub("_"," ").force_encoding('utf-8')
+      s_d_title  = r[2].strip.gsub("_"," ").force_encoding('utf-8')
+      results = ActiveRecord::Base.connection.execute("insert into solr_page_tmp values (#{r[3]},\"#{page_title}\",\"#{s_d_title}\",1);")
+   end
+   ## drop sysnonums1 && synonyms2 
+ end
+
+ def self.combineDisambiguation 
+          ActiveRecord::Base.connection.execute(OlR_PAGE_TABLE)
+   # results = ActiveRecord::Base.connection.execute(" select * from Disambiguation ;")
+#    
+   # results.each do |r|
+      # page_title = 
+      # results = ActiveRecord::Base.connection.execute("insert into solr_page_tmp values (#{r[0]},\"#{r[1]}\",\"#{r[2]}\",1);")
+   # end
+   ## drop sysnonums1 && synonyms2 
+ end
+ 
+ def self.combine
+         # ActiveRecord::Base.connection.execute(OlR_PAGE_TABLE)
+        combineSynonyms
+        combineDisambiguation
+ end  
 end
