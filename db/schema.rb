@@ -11,21 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define() do
-
-# Could not dump table "Disambiguation" because of following NoMethodError
-#   undefined method `orders' for #<ActiveRecord::ConnectionAdapters::Mysql2IndexDefinition:0x00000002c73a60>
-
-  create_table "Synonyms1", :primary_key => "rd_from", :force => true do |t|
-    t.binary  "rd_title", :limit => 255, :null => false
-    t.integer "page_id"
-  end
-
-  create_table "Synonyms2", :primary_key => "rd_from", :force => true do |t|
-    t.binary  "title",    :limit => 255, :null => false
-    t.binary  "rd_title", :limit => 255, :null => false
-    t.integer "page_id"
-  end
+ActiveRecord::Schema.define(:version => 20120810154541) do
 
   create_table "articles", :force => true do |t|
     t.text     "title"
@@ -50,26 +36,48 @@ ActiveRecord::Schema.define() do
     t.integer  "tag_id"
   end
 
-# Could not dump table "page" because of following NoMethodError
-#   undefined method `orders' for #<ActiveRecord::ConnectionAdapters::Mysql2IndexDefinition:0x000000031b2f80>
-
-# Could not dump table "pagelinks" because of following NoMethodError
-#   undefined method `orders' for #<ActiveRecord::ConnectionAdapters::Mysql2IndexDefinition:0x000000038f1940>
-
-# Could not dump table "redirect" because of following NoMethodError
-#   undefined method `orders' for #<ActiveRecord::ConnectionAdapters::Mysql2IndexDefinition:0x0000000266d4e0>
-
-  create_table "system_settings", :force => true do |t|
-    t.date "wikipedia_last", :default => '2012-07-27'
+  create_table "page", :primary_key => "page_id", :force => true do |t|
+    t.integer "page_namespace",                       :default => 0,     :null => false
+    t.binary  "page_title",            :limit => 255,                    :null => false
+    t.binary  "page_restrictions",     :limit => 255,                    :null => false
+    t.integer "page_counter",          :limit => 8,   :default => 0,     :null => false
+    t.boolean "page_is_redirect",                     :default => false, :null => false
+    t.boolean "page_is_new",                          :default => false, :null => false
+    t.float   "page_random",                          :default => 0.0,   :null => false
+    t.binary  "page_touched",          :limit => 14,                     :null => false
+    t.integer "page_latest",                          :default => 0,     :null => false
+    t.integer "page_len",                             :default => 0,     :null => false
+    t.boolean "page_no_title_convert",                :default => false, :null => false
   end
 
-  create_table "tag_pages", :force => true do |t|
+  add_index "page", ["page_is_redirect", "page_namespace", "page_len"], :name => "page_redirect_namespace_len"
+  add_index "page", ["page_len"], :name => "page_len"
+  add_index "page", ["page_namespace", "page_title"], :name => "name_title", :unique => true
+  add_index "page", ["page_random"], :name => "page_random"
+
+  create_table "pagelinks", :id => false, :force => true do |t|
+    t.integer "pl_from",                     :default => 0, :null => false
+    t.integer "pl_namespace",                :default => 0, :null => false
+    t.binary  "pl_title",     :limit => 255,                :null => false
+  end
+
+  add_index "pagelinks", ["pl_from", "pl_namespace", "pl_title"], :name => "pl_from", :unique => true
+  add_index "pagelinks", ["pl_namespace", "pl_title", "pl_from"], :name => "pl_namespace"
+
+  create_table "salehs", :force => true do |t|
+    t.integer  "s_id"
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "solar_pages", :force => true do |t|
     t.integer  "page_id"
     t.string   "page_title"
     t.string   "s_d_title"
     t.integer  "page_type"
     t.integer  "incoming"
-    t.integer  "outcoming"
+    t.integer  "outgoing"
     t.string   "en_form"
     t.integer  "link_occur"
     t.integer  "text_occur"
@@ -77,7 +85,24 @@ ActiveRecord::Schema.define() do
     t.datetime "updated_at", :null => false
   end
 
-# Could not dump table "tags" because of following NoMethodError
-#   undefined method `orders' for #<ActiveRecord::ConnectionAdapters::Mysql2IndexDefinition:0x00000003bd7bc8>
+  create_table "system_settings", :force => true do |t|
+    t.date "wikipedia_last", :default => '2012-07-25'
+  end
+
+  create_table "tags", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "official_title"
+    t.integer  "page_id"
+    t.integer  "tag_len"
+    t.integer  "ingoing_links_count"
+    t.string   "outgoing_links"
+    t.boolean  "is_redirect",          :default => false
+    t.boolean  "is_disamb",            :default => false
+    t.integer  "outgoing_links_count", :default => 0
+  end
+
+  add_index "tags", ["page_id"], :name => "index_tags_on_page_id"
 
 end
