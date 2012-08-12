@@ -1,14 +1,19 @@
 require 'preprocessing_stage/preproc_helper'
+
 module PreprocessingStage::LinkProbability
 
-@@lableOccurrence = {}
+def self.calculate_link_occure
+lableOccurrence = {} # {[label,title] => #OfOccur} 
 
-def self.linkProbabilityTable
+puts "Start parsing"
 nodes = parse_XML_file
+puts "parsing Finished"
+
 nameSpaceFlag=true
+count = 1
 nodes.each do |node|
+  
   if (node.name == 'ns' && node.inner_xml !='')
-    puts "Number #{node.inner_xml.to_i}"
     if (node.inner_xml.to_i == 0)
       nameSpaceFlag = true
     else
@@ -20,17 +25,16 @@ nodes.each do |node|
       lables=extract_anchor_labels_from_text node.inner_xml
       lables.each do |link|
         params = split_link(link[0])
-        @@lableOccurrence[params[0]] = @@lableOccurrence[params[0]] == nil ? 1:@@lableOccurrence[params[0]]+1
-        #puts @@lableOccurrence
-        #puts "**********************************************************************"
+        if params != nil && params.size >0
+          puts "L-Work on Page Number : #{count}"
+          count +=1
+          lableOccurrence[params] = lableOccurrence[params] == nil ? 1:lableOccurrence[params]+1
+        end
       end
   end
 end
-
-# create the table using the lableOccurrence {}
-
+return lableOccurrence
 end
-
 
 #Parse XML file
 def self.parse_XML_file
@@ -64,6 +68,39 @@ def self.split_link link
     return nil if a.is_i? || a.is_stopword? || p.is_i? || p.is_stopword?
     return nil if a.length < 3 || p.length < 3
     [a, p]
+end
+
+
+def self.calculate_text_occure labels_array
+trie = Trie.new(labels_array)
+text_occure={}
+nodes = parse_XML_file
+puts "parsing Finished"
+nameSpaceFlag=true
+count = 1
+
+File.open('/host/my lab/ubuntu files/t.txt', 'w') do |f2|  
+nodes.each do |node|
+  
+  if (node.name == 'ns' && node.inner_xml !='')
+    if (node.inner_xml.to_i == 0)
+      nameSpaceFlag = true
+    else
+      nameSpaceFlag = false
+    end
+  end
+  
+  if nameSpaceFlag && node.name == 'text'  # && !node.inner_xml.include?('#')
+          text_occure=trie.compute_text_occur(text_occure, node.inner_xml)
+          
+           f2.puts "P: #{count} #{text_occure} "  
+           puts "P: #{count}" 
+           count +=1
+        end 
+  end
+end
+  
+return text_occure
 end
 
 end

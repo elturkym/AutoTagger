@@ -78,21 +78,26 @@ nodes = parse_XML_file
 puts "parsing Finished"
 nameSpaceFlag=true
 count = 1
+
 nodes.each do |node|
-  
-  if (node.name == 'ns' && node.inner_xml !='')
-    if (node.inner_xml.to_i == 0)
-      nameSpaceFlag = true
-    else
-      nameSpaceFlag = false
-    end
-  end
-  
-  if nameSpaceFlag && node.name == 'text'  # && !node.inner_xml.include?('#')
-          puts "T-Work on Page Number : #{count}"
-          count +=1
-          text_occure=trie.compute_text_occur(text_occure, node.inner_xml)
-  end
+      if (node.name == 'ns' && node.inner_xml !='')
+        if (node.inner_xml.to_i == 0)
+          nameSpaceFlag = true
+        else
+          nameSpaceFlag = false
+        end
+      end
+      
+      if nameSpaceFlag && node.name == 'text'  # && !node.inner_xml.include?('#')  
+              text_occure=trie.compute_text_occur(text_occure, node.inner_xml) 
+              if (count % 50000 == 0 )  
+            	   File.open('/host/my lab/ubuntu files/t.txt', 'w') do |f2|    
+                       f2.puts "P: #{count} #{text_occure} "  
+                    end 
+             end        
+            puts "P: #{count}" 
+            count +=1
+      end 
 end
   
 return text_occure
