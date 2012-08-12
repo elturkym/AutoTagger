@@ -7,7 +7,8 @@ gem 'rails', '3.2.6'
 
 #gem 'sqlite3'
 gem 'mysql2'
-
+gem 'sunspot_rails'
+gem 'sunspot_solr'
 gem 'nokogiri'
 
 # Gems used only for assets and not required
