@@ -261,6 +261,49 @@ Connecting to database specified by database.yml
 Connecting to database specified by database.yml
 Connecting to database specified by database.yml
 Connecting to database specified by database.yml
+<<<<<<< HEAD
+=======
+  [1m[36m (115.2ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.5ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.5ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (0.6ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.5ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.4ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.4ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.4ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (17.8ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (0.4ms)[0m  [1mSHOW TABLES[0m
+Connecting to database specified by database.yml
+  [1m[36m (46.0ms)[0m  [1mSELECT `schema_migrations`.`version` FROM `schema_migrations` [0m
+Migrating to CreateSolarPages (20120810143215)
+  [1m[35m (407.3ms)[0m  CREATE TABLE `solar_pages` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `page_id` int(11), `page_title` varchar(255), `s_d_title` varchar(255), `page_type` int(11), `incoming` int(11), `outgoing` int(11), `en_form` varchar(255), `link_occur` int(11), `text_occur` int(11), `created_at` datetime NOT NULL, `updated_at` datetime NOT NULL) ENGINE=InnoDB
+  [1m[36m (107.9ms)[0m  [1mINSERT INTO `schema_migrations` (`version`) VALUES ('20120810143215')[0m
+  [1m[35m (0.4ms)[0m  SELECT `schema_migrations`.`version` FROM `schema_migrations` 
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+>>>>>>> 6bfeb1fe554513ad3df00a2cedefe3deeee57c2c
 Connecting to database specified by database.yml
 Connecting to database specified by database.yml
 Connecting to database specified by database.yml

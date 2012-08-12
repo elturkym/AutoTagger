@@ -5,55 +5,44 @@ class PreprocessingStage::PreProcessing
 include LinkProbability
 
 def self.test
-DB.run_queries [INSERT_ANCHOR_DATA_INTO_PROP_TABLE%["ali",2]]
+fun
 end
 
 def self.callLinkProbability
+  
   puts "Start linkProbabilityTable"
   
   puts "Start calculate_link_occure"
   link_occure=PreprocessingStage::LinkProbability.calculate_link_occure #label:{[label,title] => #OfOccur}
   puts "End calculate_link_occure"
   
-  labels=[]
-  link_occure.each do |key,val|
-    if (key[0] != nil && key[0].size >0)
-      labels << key[0]
-    end  
-  end
-
+  # puts link_occure
+  
   puts "Start calculate_text_occure"
+  labels=extract_lables link_occure
   text_occure=PreprocessingStage::LinkProbability.calculate_text_occure labels #{text =>#OfOccur}
   #call calculate_text_occure functions with teh keys stored in array
   puts "End calculate_text_occure"
   
   puts "Start save_link_probability_table"
-  save_link_probability_table link_occure,text_occure
+  PreprocessingStage::LinkProbability.save_link_probability_table link_occure,text_occure
   puts "End save_link_probability_table"
   
+  puts "Start extract_save_english_translations"
+  PreprocessingStage::LinkProbability.extract_save_english_translations
+  puts "Finish extract_save_english_translations"
 end
 
-def self.save_link_probability_table link,text
-  ActiveRecord::Base.connection.execute("
-  create table link_prop_tmp(
-  label VARCHAR(255) NOT NULL,
-  page_title VARCHAR(255) NOT NULL,
-  text_occure MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-  link_occure MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-  KEY(page_title)
-  ) DEFAULT CHARSET=utf8;
-  ")
-  link.each do |key, val|
-  if (text[key[0]] == nil)
-    text[key[0]]=0
+def self.extract_lables link_occure
+ # we need only the labels to build the trie
+  labels=[]
+  link_occure.each do |key,val|
+    if (key[0] != nil && key[0].size > 0)
+      labels << key[0]
+    end
   end
-  ActiveRecord::Base.connection.execute("
-  INSERT IGNORE INTO link_prop_tmp(label, page_title, text_occure, link_occure) 
-  VALUES (\"#{key[0]}\",\"#{key[1]}\",#{text[key[0]]},#{val});
-  ")
-  end
+  return labels 
 end
-
  def self.synonymsFirstJoin
     results = 
         ActiveRecord::Base.connection.execute(" select rd_from , rd_title , page_id
