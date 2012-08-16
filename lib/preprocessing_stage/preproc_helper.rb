@@ -2,7 +2,7 @@
 require 'nokogiri'
 require 'preprocessing_stage/arabic_normalizer'
 
-XML_FILE = File.join('', "#{::Rails.root}/arwiki-latest-pages-articles.xml")
+#XML_FILE = File.join('', "#{RAILS_ROOT}/arwiki-latest-pages-articles.xml")
 
 LINK_PATTERN = /\[\[([^\[\]:]*)\]\]/
 ENGLISH_FORM_PATTERN = /\[\[en:(.*)\]\]/
