@@ -1,4 +1,9 @@
 AutoTagger::Application.routes.draw do
+  get "results/index"
+
+  resources :results , :only=>[:index]
+   match "/results"=>"results#index"
+   
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

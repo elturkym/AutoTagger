@@ -18,7 +18,9 @@ class Trie
       end
       a = arr.map{|e| Arabic.normalize(e).split(' ').map{|m| m.strip}}
       #puts "Add #{a.length} Labels"
+      
       build_trie a
+      
     end
     
     # compute the text occurrences of trie elements in the processed text
@@ -39,9 +41,10 @@ class Trie
     #     trie.compute_text_occur("foo bar this text foo and bar", true)
     #     p trie.text_occur
     #     #=> {"foo"=>2, "foo bar"=>1, "bar"=>2}
-    def compute_text_occur text_occur_accum, text , count_all_the_occur=false
+    
+    def compute_text_occur text_occur_accum, text ,labels, count_all_the_occur=false
       words = Arabic.normalize(text).scan(WORD_PATTERN)
-      words.each_with_index do |word, index|
+      words.each_with_index do |word , index|
         compute_text_occur_for_word word, index, words, text_occur_accum
       end
       text_occur_accum.each do |k, val| 

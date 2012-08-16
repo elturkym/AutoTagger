@@ -60,6 +60,12 @@ class PreprocessingStage::ArabicNormalizer
     return input
   end
 
+  def normalize_only(input, options=@options[:norm_all])
+    (options = options.is_a?(Array) ? options : [options]).each do |option|
+      input=input.gsub(@options[option][:reg], @options[option][:replacement] )
+    end
+    return input
+  end
   protected
 
   def build_regex(hash)
